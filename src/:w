@@ -1,0 +1,14 @@
+import React from react
+import { onSnapshot, collection, addDoc } from "@firebase/firestore"
+import { useEffect, useState } from "react"
+import db from "./firebase"
+
+function TemplateEditor() {
+  return (
+    <div>
+      <h1>Template Editor</h1>
+    </div>
+  );
+}
+
+export default TemplateEditor;
