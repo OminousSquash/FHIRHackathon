@@ -1,8 +1,21 @@
-# React + Vite
+# FHIR Hackathon: Streamlining the Discharge Process
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Testing the project locally
 
-Currently, two official plugins are available:
+If you haven't installed vite yet, run the following command:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+npm create vite@latest
+```
+
+Then, install the dependencies:
+
+```bash
+npm install
+```
+
+Finally, run the project:
+
+```bash
+npm run dev
+```
