@@ -1,8 +1,8 @@
 import React from "react";
-import FormGenerator from "./components/FormGenerator";
-import "./App.css";
-
-// TODO: make use or router for navigation
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Form from "./pages/Form";
+import TemplateEditor from "./pages/TemplateEditor";
 
 // TODO: first, just have a form that loads the form templates given a drag and drop
 //       the drag and drop will have the first option as "Create a new form" and all the remaining as pre-existing forms
@@ -11,10 +11,13 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="app">
-      <h1>Form Generator</h1>
-      <FormGenerator />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/fill-form" element={<Form />} />
+        <Route path="/create-form" element={<TemplateEditor />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

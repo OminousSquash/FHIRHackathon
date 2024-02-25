@@ -35,14 +35,17 @@ function FormGenerator() {
   };
 
   return (
-    <div>
+    <div className="p-6 bg-gray-100 rounded-md shadow-md">
       {isLoading && <p>Loading templates...</p>}
       {error && <p>Error loading templates: {error.message}</p>}
 
       {!isLoading && !error && (
         <>
-          <h3>Select a template</h3>
-          <select onChange={(e) => handleTemplateSelect(e.target.value)}>
+          <h3 className="text-xl font-semibold mb-4">Select a template</h3>
+          <select
+            onChange={(e) => handleTemplateSelect(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4"
+          >
             <option value="">Choose a template</option>
             {templates.map((template) => (
               <option key={template.id} value={template.id}>
@@ -54,9 +57,14 @@ function FormGenerator() {
           {selectedTemplate && (
             <form onSubmit={handleSubmit}>
               {selectedTemplate.fields.map((field) => (
-                <Field key={field.name} {...field} />
+                <Field key={field.name} {...field} className="mb-4" />
               ))}
-              <button type="submit">Submit</button>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Submit
+              </button>
             </form>
           )}
         </>
