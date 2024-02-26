@@ -5,12 +5,23 @@ import db from "./firebase"
 
 function TemplateEditor() {
     const handleNew = async() => {
-        const name = prompt ("Enter form name")
-        const field1 = prompt("Enter first field name")
-        const field2 = prompt ("Enter second field name")
-        const collectionsRef = collection(db, "formTemplates")
-        const payload = {name, field1, field2}
-        await addDoc(collectionsRef, payload);
+        var formName = prompt("Enter form name")
+        var numberInputs = prompt("How many fields");
+        var inputs = []
+        var count = parseInt(numberInputs, 10);
+        if (!isNaN(count)){
+            for (var i = 0; i < count; i++){
+                var fieldName = prompt("Enter field name: ");
+                inputs.push(fieldName);
+            }
+        }
+        var payload = {}
+        payload["name"] = formName
+        for (var i = 0; i < inputs.length; i++){
+            payload["field" + (i + 1)] = inputs[i]
+        }
+        const collectionRef = collection(db, "formTemplates");
+        await addDoc(collectionRef, payload)
     }
 
     return (
