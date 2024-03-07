@@ -41,6 +41,8 @@ function FormGenerator() {
       form[key] = value;
     }
     await addDoc(collectionRef, form);
+    // page should reset after submitting
+    event.target.reset(); // behaviour could be changed here
   };
 
   return (
