@@ -44,6 +44,11 @@ function TemplateEditor() {
 
   const handleSaveForm = async () => {
     const collectionRef = collection(db, "formTemplates");
+    fields.push({
+      name:"patient name",
+      type:"text",
+      description:"patient name",
+    })
     await addDoc(collectionRef, {
       name: formName,
       fields: fields,

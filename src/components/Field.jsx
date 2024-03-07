@@ -19,7 +19,7 @@ function Field({ name, description, type, unit, ...otherProps }) {
 
   return (
     <div className="field-container">
-      {description && <p className="field-description">{description}</p>}
+      {name && <p className="field-description">{name}</p>}
       {renderInputField()}
     </div>
   );
