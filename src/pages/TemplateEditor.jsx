@@ -44,11 +44,14 @@ function TemplateEditor() {
 
   const handleSaveForm = async () => {
     const collectionRef = collection(db, "formTemplates");
-    fields.push({
-      name:"patient name",
-      type:"text",
-      description:"patient name",
-    })
+    // add the patient name at the start by default
+    fields.unshift({
+      name: "patient-name",
+      description: "Enter patient name",
+      type: "text",
+      unit: "",
+    });
+
     await addDoc(collectionRef, {
       name: formName,
       fields: fields,
