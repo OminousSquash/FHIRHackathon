@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { loadTemplates } from "../utils.js";
 import Field from "./Field";
+import { addDoc, collection } from "@firebase/firestore";
+import db from "../pages/firebase.js";
 
 function FormGenerator() {
   const [templates, setTemplates] = useState([]);
@@ -30,8 +32,15 @@ function FormGenerator() {
     );
   };
 
-  const handleSubmit = (formData) => {
-    console.log("Form data", formData);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const collectionRef = collection(db, "patientData");
+    const form = {};
+    for (let [key, value] of formData.entries()) {
+      form[key] = value;
+    }
+    await addDoc(collectionRef, form);
   };
 
   return (
