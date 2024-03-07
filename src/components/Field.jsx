@@ -6,21 +6,41 @@ function Field({ name, description, type, unit, ...otherProps }) {
       case "numeric":
         return (
           <>
-            <input type="number" name={name} {...otherProps} />
-            {unit && <span> ({unit})</span>}
+            <input
+              type="number"
+              name={name}
+              {...otherProps}
+              className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+            {unit && <span className="ml-2 text-gray-500">{unit}</span>}
           </>
         );
+
       case "text":
-        return <input type="text" name={name} {...otherProps} />;
+        return (
+          <input
+            type="text"
+            name={name}
+            {...otherProps}
+            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+        );
+
       default:
-        return <p>Unsupported field type: {type}</p>;
+        return <p className="text-red-500">Unsupported field type: {type}</p>;
     }
   };
 
   return (
-    <div className="field-container">
-      {description && <p className="field-description">{description}</p>}
-      {renderInputField()}
+    <div className="mb-4 border rounded-lg p-4">
+      {" "}
+      {/* Field Container */}
+      {description && <p className="text-gray-700 mb-2">{description}</p>}
+      <div className="flex items-center">
+        {" "}
+        {/* Input */}
+        {renderInputField()}
+      </div>
     </div>
   );
 }
