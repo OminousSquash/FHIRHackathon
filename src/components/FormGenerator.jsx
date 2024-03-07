@@ -35,7 +35,7 @@ function FormGenerator() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 rounded-md shadow-md">
+    <>
       {isLoading && <p>Loading templates...</p>}
       {error && <p>Error loading templates: {error.message}</p>}
 
@@ -69,7 +69,7 @@ function FormGenerator() {
           )}
         </>
       )}
-    </div>
+    </>
   );
 }
 
