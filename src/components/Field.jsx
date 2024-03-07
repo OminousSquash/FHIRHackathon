@@ -10,7 +10,7 @@ function Field({ name, description, type, unit, ...otherProps }) {
             {unit && <span> ({unit})</span>}
           </>
         );
-      case "textual":
+      case "text":
         return <input type="text" name={name} {...otherProps} />;
       default:
         return <p>Unsupported field type: {type}</p>;
