@@ -1,6 +1,7 @@
 import React from "react";
 import db from "../firebase";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import TemplateCard from "../components/TemplateCard";
 import { loadTemplates } from "../utils";
 import {
@@ -125,6 +126,28 @@ function TemplateEditor() {
 
   return (
     <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-semibold">Form Templates</h1>
+      <div className="flex items-center mb-6">
+        {" "}
+        {/* Add a container div for the button */}
+        {isEditing ? (
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto"
+            onClick={handleCancelForm}
+          >
+            Close Form
+          </button>
+        ) : (
+          <Link
+            to="/"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto"
+          >
+            Go Back
+          </Link>
+        )}
+      </div>
+
+      {/* Form Cards */}
       {!isEditing && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {" "}
@@ -165,7 +188,6 @@ function TemplateEditor() {
           ))}
         </div>
       )}
-
       {isEditing && (
         <div className="bg-white p-6 rounded-lg shadow-md mt-6 max-w-md sm:max-w-lg md:max-w-xl mx-auto">
           {/* Form Name Input */}
