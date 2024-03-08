@@ -15,9 +15,6 @@ import {
   where,
 } from "firebase/firestore";
 
-// TODO: editor page should look like this
-//       - A button to delete an existing template
-
 function TemplateEditor() {
   const [formName, setFormName] = useState("");
   const [fields, setFields] = useState([]);
@@ -88,6 +85,7 @@ function TemplateEditor() {
         description: "",
         type: "text", // Default type
         unit: "", // Default unit
+        options: [""], // Default options
       },
     ]);
   };
@@ -102,6 +100,27 @@ function TemplateEditor() {
 
   const handleDeleteField = (index) => {
     setFields([...fields.slice(0, index), ...fields.slice(index + 1)]);
+  };
+
+  const handleAddOption = (index) => {
+    setFields([
+      ...fields.slice(0, index),
+      { ...fields[index], options: [...fields[index].options, ""] }, // Add empty option
+      ...fields.slice(index + 1),
+    ]);
+  };
+
+  const handleRemoveOption = (fieldIndex, optionIndex) => {
+    setFields([
+      ...fields.slice(0, fieldIndex),
+      {
+        ...fields[fieldIndex],
+        options: fields[fieldIndex].options.filter(
+          (_, idx) => idx !== optionIndex
+        ),
+      },
+      ...fields.slice(fieldIndex + 1),
+    ]);
   };
 
   const handleSaveForm = async () => {
@@ -277,6 +296,7 @@ function TemplateEditor() {
               >
                 <option value="text">Text</option>
                 <option value="numeric">Numeric</option>
+                <option value="option">Option</option>
               </select>
               {field.type === "numeric" && (
                 <input
@@ -289,6 +309,46 @@ function TemplateEditor() {
                   placeholder="Unit"
                   className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-2"
                 />
+              )}
+              {field.type === "option" && (
+                <div className="options-field">
+                  {" "}
+                  <div className="mb-2">
+                    {field.options.slice(0).map((option, optionIndex) => (
+                      <div
+                        key={optionIndex}
+                        className="flex items-center space-x-2 mb-2"
+                      >
+                        <input
+                          value={option}
+                          onChange={(e) =>
+                            handleFieldChange(
+                              index,
+                              "options",
+                              field.options.map((opt, idx) =>
+                                idx === optionIndex ? e.target.value : opt
+                              )
+                            )
+                          }
+                          placeholder="Enter an option"
+                          className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        />
+                        <button
+                          onClick={() => handleRemoveOption(index, optionIndex)}
+                          className="bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleAddOption(index)}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2"
+                  >
+                    Add Option
+                  </button>
+                </div>
               )}
               <button
                 className="bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
