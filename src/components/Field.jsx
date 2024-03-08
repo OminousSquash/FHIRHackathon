@@ -26,6 +26,22 @@ function Field({ name, description, type, unit, ...otherProps }) {
           />
         );
 
+      case "option":
+        return (
+          <select
+            name={name}
+            {...otherProps}
+            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          >
+            <option value="">Select an option</option>
+            {otherProps.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
+
       default:
         return <p className="text-red-500">Unsupported field type: {type}</p>;
     }
