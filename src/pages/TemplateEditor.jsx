@@ -6,8 +6,10 @@ import TemplateCard from "../components/TemplateCard";
 import { loadTemplates } from "../utils";
 import {
   collection,
+  doc,
   addDoc,
   updateDoc,
+  deleteDoc,
   getDocs,
   query,
   where,
@@ -55,6 +57,27 @@ function TemplateEditor() {
     setFormName(templateToEdit.name);
     setFields(templateToEdit.fields);
     setIsEditing(true);
+  };
+
+  const handleDeleteTemplate = async (templateId) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the template with the ID ${templateId}?`
+      )
+    ) {
+      try {
+        const docRef = doc(db, "formTemplates", templateId);
+        await deleteDoc(docRef);
+      } catch (error) {
+        console.error("Error deleting template:", error);
+      }
+    }
+
+    // Reload the templates
+    const loadedTemplates = await loadTemplates();
+    setTemplates(loadedTemplates);
+
+    setIsEditing(false);
   };
 
   const handleAddField = () => {
@@ -118,10 +141,15 @@ function TemplateEditor() {
       });
     }
     setIsEditing(false); // Close the form
+    // Reload the templates
+    const loadedTemplates = await loadTemplates();
+    setTemplates(loadedTemplates);
   };
 
   const handleCancelForm = () => {
     setIsEditing(false); // Close the form
+    setFormName(""); // Clear the form name
+    setFields([]); // Clear the fields
   };
 
   return (
@@ -182,8 +210,9 @@ function TemplateEditor() {
           {templates.map((template) => (
             <TemplateCard
               key={template.id}
-              template={template} // Pass the actual template object
+              template={template}
               onEdit={() => handleEditTemplate(template.id)}
+              onDelete={handleDeleteTemplate}
             />
           ))}
         </div>
