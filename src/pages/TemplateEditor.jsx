@@ -1,7 +1,7 @@
 import React from "react";
 import { collection, addDoc } from "@firebase/firestore";
 import { useState } from "react";
-import db from "./firebase";
+import db from "../firebase";
 
 // TODO: editor page should look like this
 //       - A button to edit an existing template

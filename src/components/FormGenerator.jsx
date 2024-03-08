@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { loadTemplates } from "../utils.js";
 import Field from "./Field";
 import { addDoc, collection } from "@firebase/firestore";
-import db from "../pages/firebase.js";
+import db from "../firebase.js";
 
 function FormGenerator() {
   const [templates, setTemplates] = useState([]);
@@ -38,11 +38,18 @@ function FormGenerator() {
     const collectionRef = collection(db, "patientData");
     const form = {};
     for (let [key, value] of formData.entries()) {
-      form[key] = value;
+      // TODO: find a less hacky way to handle numeric fields
+      const field = selectedTemplate.fields.find((field) => field.name === key);
+      if (field.type === "numeric") {
+        form[key] = parseFloat(value);
+      } else {
+        form[key] = value;
+      }
     }
-    await addDoc(collectionRef, form);
     // page should reset after submitting
     event.target.reset(); // behaviour could be changed here
+
+    await addDoc(collectionRef, form);
   };
 
   return (
