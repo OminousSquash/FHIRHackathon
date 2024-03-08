@@ -37,6 +37,8 @@ function FormGenerator() {
     const formData = new FormData(event.target);
     const collectionRef = collection(db, "patientData");
     const form = {};
+    var now = new Date();
+
     for (let [key, value] of formData.entries()) {
       // TODO: find a less hacky way to handle numeric fields
       const field = selectedTemplate.fields.find((field) => field.name === key);
