@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { loadTemplates } from "../utils.js";
 import Field from "./Field";
-import { addDoc, collection, setDoc, doc, updateDoc, arrayUnion} from "@firebase/firestore";
+import { collection, setDoc, doc, arrayUnion } from "@firebase/firestore";
 import db from "../firebase.js";
-import firebase from "../firebase.js";
 
 function FormGenerator() {
   const [templates, setTemplates] = useState([]);
@@ -44,28 +43,28 @@ function FormGenerator() {
     var seconds = now.getSeconds();
     var timeString = hours + ":" + minutes + ":" + seconds;
     var patientName = "";
-    form['time'] = timeString;
+    form["time"] = timeString;
     for (let [key, value] of formData.entries()) {
       // TODO: find a less hacky way to handle numeric fields
       const field = selectedTemplate.fields.find((field) => field.name === key);
       if (field.type === "numeric") {
         form[key] = parseFloat(value);
       } else {
-        if (key === 'patient-name'){
+        if (key === "patient-name") {
           patientName = value;
-        } else{
+        } else {
           form[key] = value;
         }
       }
     }
     var updateObject = {};
-    const docRef = doc(db, "patientData", patientName); 
-    console.log(docRef)
-    for (const [key, value] of Object.entries(form)){
+    const docRef = doc(db, "patientData", patientName);
+    console.log(docRef);
+    for (const [key, value] of Object.entries(form)) {
       updateObject[key] = arrayUnion(value);
     }
 
-    await setDoc(docRef, updateObject, { merge : true }) 
+    await setDoc(docRef, updateObject, { merge: true });
     event.target.reset(); // behaviour could be changed here
   };
 
