@@ -28,6 +28,16 @@ function Home() {
             Design a custom form template for future use.
           </p>
         </Link>
+
+        <Link 
+          to="/get-patient-details" 
+          className="bg-violet-500 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-md shadow-md"
+        >
+          <h1 className="text-xl text-center">Select Patient</h1>
+          <p className="text-gray-200">
+            Get patient data for a specific patient
+          </p>
+        </Link>
       </div>
     </div>
   );

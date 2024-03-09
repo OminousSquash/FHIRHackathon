@@ -1,54 +1,3 @@
-//   // placeholder data for testing
-//   return [
-//     {
-//       id: "1",
-//       name: "covid form",
-//       fields: [
-//         {
-//           name: "blood-pressure",
-//           unit: "mmHg",
-//           description: "Enter patient blood pressure",
-//           type: "numeric",
-//           expected: 128,
-//         },
-//         {
-//           name: "temperature",
-//           unit: "degrees Celsius",
-//           description: "Enter patient temperature",
-//           type: "numeric",
-//           expected: 37,
-//         },
-//         {
-//           name: "urine-color",
-//           description: "Enter patient urine color",
-//           type: "textual",
-//           expected: "light yellow",
-//         },
-//       ],
-//     },
-//     {
-//       id: "2",
-//       name: "vitals form",
-//       fields: [
-//         {
-//           name: "blood-pressure",
-//           unit: "mmHg",
-//           description: "Enter patient blood pressure",
-//           type: "numeric",
-//           expected: 128,
-//         },
-//         {
-//           name: "temperature",
-//           unit: "degrees Celsius",
-//           description: "Enter patient temperature",
-//           type: "numeric",
-//           expected: 37,
-//         },
-//       ],
-//     },
-//   ];
-// }
-
 import { collection, getDocs } from "firebase/firestore";
 import db from "./pages/firebase";
 
@@ -68,4 +17,14 @@ async function loadTemplates() {
   return templates;
 }
 
-export { loadTemplates };
+async function loadNames() {
+  const templatesCollectionRef = collection(db, "patientData");
+  const querySnapshot = await getDocs(templatesCollectionRef) 
+  const patientData = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }))
+  return patientData;
+}
+
+export { loadTemplates, loadNames };
