@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { loadTemplates } from "../utils.js";
 import Field from "./Field";
-import { addDoc, collection, setDoc, doc } from "@firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, arrayUnion} from "@firebase/firestore";
 import db from "../firebase.js";
+import firebase from "../firebase.js";
 
 function FormGenerator() {
   const [templates, setTemplates] = useState([]);
@@ -57,10 +58,15 @@ function FormGenerator() {
         }
       }
     }
-    console.log(patientName)
-    const docRef = doc(db, "patientData", patientName)
+    var updateObject = {};
+    const docRef = doc(db, "patientData", patientName); 
+    console.log(docRef)
+    for (const [key, value] of Object.entries(form)){
+      updateObject[key] = arrayUnion(value);
+    }
+
+    await setDoc(docRef, updateObject, { merge : true }) 
     event.target.reset(); // behaviour could be changed here
-    setDoc(docRef, form)
   };
 
   return (
