@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { loadTemplates } from "../utils.js";
 import Field from "./Field";
-import { addDoc, collection } from "@firebase/firestore";
+import { addDoc, collection, setDoc, doc } from "@firebase/firestore";
 import db from "../firebase.js";
 
 function FormGenerator() {
@@ -38,20 +38,29 @@ function FormGenerator() {
     const collectionRef = collection(db, "patientData");
     const form = {};
     var now = new Date();
-
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    var timeString = hours + ":" + minutes + ":" + seconds;
+    var patientName = "";
+    form['time'] = timeString;
     for (let [key, value] of formData.entries()) {
       // TODO: find a less hacky way to handle numeric fields
       const field = selectedTemplate.fields.find((field) => field.name === key);
       if (field.type === "numeric") {
         form[key] = parseFloat(value);
       } else {
-        form[key] = value;
+        if (key === 'patient-name'){
+          patientName = value;
+        } else{
+          form[key] = value;
+        }
       }
     }
-    // page should reset after submitting
+    console.log(patientName)
+    const docRef = doc(db, "patientData", patientName)
     event.target.reset(); // behaviour could be changed here
-
-    await addDoc(collectionRef, form);
+    setDoc(docRef, form)
   };
 
   return (
