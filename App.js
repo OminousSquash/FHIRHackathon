@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
-import BloodSampleGraph from './BloodSampleGraph'; // Import the BloodPressureGraph component
+import DynamicGraph from './DynamicGraph';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
           Learn React
         </a>
       </header>
-      <BloodSampleGraph /> {/* Include the BloodPressureGraph component */}
+      <DynamicGraph/> {}
     </div>
   );
 }
