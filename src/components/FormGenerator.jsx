@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { loadTemplates } from "../utils.js";
 import Field from "./Field";
+import { collection, setDoc, doc, arrayUnion } from "@firebase/firestore";
+import db from "../firebase.js";
 
 function FormGenerator() {
   const [templates, setTemplates] = useState([]);
@@ -30,12 +32,44 @@ function FormGenerator() {
     );
   };
 
-  const handleSubmit = (formData) => {
-    console.log("Form data", formData);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const collectionRef = collection(db, "patientData");
+    const form = {};
+    var now = new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    var timeString = hours + ":" + minutes + ":" + seconds;
+    var patientName = "";
+    form["time"] = timeString;
+    for (let [key, value] of formData.entries()) {
+      // TODO: find a less hacky way to handle numeric fields
+      const field = selectedTemplate.fields.find((field) => field.name === key);
+      if (field.type === "numeric") {
+        form[key] = parseFloat(value);
+      } else {
+        if (key === "patient-name") {
+          patientName = value;
+        } else {
+          form[key] = value;
+        }
+      }
+    }
+    var updateObject = {};
+    const docRef = doc(db, "patientData", patientName);
+    console.log(docRef);
+    for (const [key, value] of Object.entries(form)) {
+      updateObject[key] = arrayUnion(value);
+    }
+
+    await setDoc(docRef, updateObject, { merge: true });
+    event.target.reset(); // behaviour could be changed here
   };
 
   return (
-    <div className="p-6 bg-gray-100 rounded-md shadow-md">
+    <>
       {isLoading && <p>Loading templates...</p>}
       {error && <p>Error loading templates: {error.message}</p>}
 
@@ -69,7 +103,7 @@ function FormGenerator() {
           )}
         </>
       )}
-    </div>
+    </>
   );
 }
 

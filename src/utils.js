@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import db from "./pages/firebase";
+import db from "./firebase";
 
 async function loadTemplates() {
   console.log("Loading templates...");
@@ -13,7 +13,6 @@ async function loadTemplates() {
     ...doc.data(),
   }));
 
-  console.log("Templates brooo", templates);
   return templates;
 }
 
