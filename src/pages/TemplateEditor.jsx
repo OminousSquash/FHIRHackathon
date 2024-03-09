@@ -1,5 +1,4 @@
 import React from "react";
-import db from "../firebase";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import TemplateCard from "../components/TemplateCard";
@@ -14,6 +13,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import db from "../firebase";
 
 function TemplateEditor() {
   const [formName, setFormName] = useState("");
