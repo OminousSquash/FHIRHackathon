@@ -16,4 +16,14 @@ async function loadTemplates() {
   return templates;
 }
 
-export { loadTemplates };
+async function loadNames() {
+  const templatesCollectionRef = collection(db, "patientData");
+  const querySnapshot = await getDocs(templatesCollectionRef) 
+  const patientData = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }))
+  return patientData;
+}
+
+export { loadTemplates, loadNames };
