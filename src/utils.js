@@ -13,7 +13,6 @@ async function loadTemplates() {
     ...doc.data(),
   }));
 
-  console.log("Templates brooo", templates);
   return templates;
 }
 

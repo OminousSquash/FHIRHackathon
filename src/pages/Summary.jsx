@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import db from "../firebase";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import OpenAI from "openai";
 
 async function getAPIKey() {
@@ -16,9 +17,20 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-// you enter a patient's name, and from it we will get all the data associated with that patient, and based on that data
-// we pass it to gpt3.5 which will generate a summary of the data
-// we will then display the summary on the page
+function organizeData(data) {
+  let fieldNames = Object.keys(data);
+  let organizedData = fieldNames.join(", ") + "\n";
+  let fieldValues = Object.values(data);
+  let numEntries = fieldValues[0].length;
+  for (let i = 0; i < numEntries; i++) {
+    let line = "";
+    for (let j = 0; j < fieldNames.length; j++) {
+      line += fieldValues[j][i] + ", ";
+    }
+    organizedData += line + "\n";
+  }
+  return organizedData;
+}
 
 function Summary() {
   const [patientName, setPatientName] = useState("");
@@ -26,9 +38,11 @@ function Summary() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(API_KEY);
-    // for debugging, let's say patient data is just a string
-    const patientData = "Patient has a fever and a cough";
+    let patientData = collection(db, "patientData");
+    const patientDataDoc = doc(patientData, patientName);
+    const patientDataSnapshot = await getDoc(patientDataDoc);
+    patientData = organizeData(patientDataSnapshot.data());
+
     const response = await openai.chat.completions.create({
       messages: [
         { role: "system", content: "You are a patient data summarizer" },
