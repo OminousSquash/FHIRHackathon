@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import HealthDataGraphs from "../components/HealthDataGraphs";
 import { loadNames } from "../utils";
 
-const API_KEY = "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"; // todo: make this more secure
+const API_KEY = "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"; // todo: make this more secure
 
 const openai = new OpenAI({
   apiKey: API_KEY,
