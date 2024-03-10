@@ -5,14 +5,7 @@ import { collection, doc, getDoc } from "firebase/firestore";
 import OpenAI from "openai";
 import { Link } from "react-router-dom";
 import HealthDataGraphs from "../components/HealthDataGraphs";
-import { loadNames } from "../utils";
-
-const API_KEY = "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"; // todo: make this more secure
-
-const openai = new OpenAI({
-  apiKey: API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+import { loadNames, loadApiKey } from "../utils";
 
 function organizeData(data) {
   let fieldNames = Object.keys(data);
@@ -36,6 +29,7 @@ function Summary() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
   const [names, setNames] = useState([]);
+  const [apiKey, setApiKey] = useState("");
 
   useEffect(() => {
     const fetchNames = async () => {
@@ -48,7 +42,25 @@ function Summary() {
       }
     };
     fetchNames();
+
+    // fetch the openai api key from database
+    const fetchApiKey = async () => {
+      try {
+        const apiKey = await loadApiKey();
+        setApiKey(apiKey);
+      } catch (error) {
+        console.log("Error");
+        console.log(error);
+      }
+    };
+
+    fetchApiKey();
   }, []);
+
+  const openai = new OpenAI({
+    apiKey: apiKey,
+    dangerouslyAllowBrowser: true,
+  });
 
   const handlePatientSelect = (id) => {
     setPatientSelection(id);

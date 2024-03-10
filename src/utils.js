@@ -14,12 +14,19 @@ async function loadTemplates() {
 
 async function loadNames() {
   const templatesCollectionRef = collection(db, "patientData");
-  const querySnapshot = await getDocs(templatesCollectionRef) 
+  const querySnapshot = await getDocs(templatesCollectionRef);
   const patientData = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  }))
+  }));
   return patientData;
 }
 
-export { loadTemplates, loadNames };
+async function loadApiKey() {
+  const apiKeyCollectionRef = collection(db, "OPENAI_API_KEY");
+  const querySnapshot = await getDocs(apiKeyCollectionRef);
+  const apiKey = querySnapshot.docs[0].id;
+  return apiKey;
+}
+
+export { loadTemplates, loadNames, loadApiKey };
