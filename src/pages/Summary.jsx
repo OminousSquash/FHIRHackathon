@@ -7,13 +7,7 @@ import { Link } from "react-router-dom";
 import HealthDataGraphs from "../components/HealthDataGraphs";
 import { loadNames } from "../utils";
 
-async function getAPIKey() {
-  const response = await fetch("../api_key.txt");
-  const text = await response.text();
-  return text;
-}
-
-const API_KEY = await getAPIKey();
+const API_KEY = "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"; // todo: make this more secure
 
 const openai = new OpenAI({
   apiKey: API_KEY,
