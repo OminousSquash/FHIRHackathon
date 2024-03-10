@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="container mx-auto mt-12 flex flex-col items-center gap-8">
+    <div className="container mx-auto mt-12 flex flex-col items-center gap-8 p-8">
       <h1 className="text-3xl font-bold mb-4">
-        Fill in or Create Discharge Form
+        Patient Discharge Letter Generator
       </h1>
 
       <div className="grid grid-cols-2 gap-8 sm:max-w-xl md:max-w-3xl">
@@ -28,21 +28,16 @@ function Home() {
             Design a custom form template for future use.
           </p>
         </Link>
-        <Link
-          to="/get-patient-details"
-          className="bg-violet-500 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-md shadow-md"
-        >
-          <h1 className="text-xl text-center">Select Patient</h1>
-          <p className="text-gray-200">
-            Get patient data for a specific patient
-          </p>
-        </Link>
+
         <Link
           to="/summary"
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-6 px-8 rounded-md shadow-md"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-6 px-8 rounded-md shadow-md col-span-2" // Full width link
         >
           <h1 className="text-xl text-center">Summary</h1>
-          <p className="text-gray-200">Generate a summary of patient data.</p>
+          <p className="text-gray-200">
+            Generate analytics, statistics and a summary of the patient's data
+            to help make the discharge letter.
+          </p>
         </Link>
       </div>
     </div>
