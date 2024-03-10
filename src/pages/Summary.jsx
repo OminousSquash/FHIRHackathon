@@ -1,9 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import db from "../firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
 import OpenAI from "openai";
 import { Link } from "react-router-dom";
+import HealthDataGraphs from "../components/HealthDataGraphs";
+import { loadNames } from "../utils";
 
 async function getAPIKey() {
   const response = await fetch("../api_key.txt");
@@ -35,16 +37,47 @@ function organizeData(data) {
 
 function Summary() {
   const [patientName, setPatientName] = useState("");
+  const [patientSelection, setPatientSelection] = useState("");
   const [summary, setSummary] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState(null);
+  const [names, setNames] = useState([]);
+
+  useEffect(() => {
+    const fetchNames = async () => {
+      try {
+        const loadedNames = await loadNames();
+        setNames(loadedNames);
+      } catch (error) {
+        console.log("Error");
+        console.log(error);
+      }
+    };
+    fetchNames();
+  }, []);
+
+  const handlePatientSelect = (id) => {
+    setPatientSelection(id);
+    setSummary("");
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsGenerating(true);
+    setPatientName(patientSelection);
 
     let patientData = collection(db, "patientData");
-    const patientDataDoc = doc(patientData, patientName);
+    const patientDataDoc = doc(patientData, patientSelection);
     const patientDataSnapshot = await getDoc(patientDataDoc);
+
+    if (!patientDataSnapshot.exists()) {
+      setError("No patient data found");
+      setIsGenerating(false);
+      return;
+    }
+
+    setError(null);
+
     patientData = organizeData(patientDataSnapshot.data());
 
     const response = await openai.chat.completions.create({
@@ -82,13 +115,26 @@ Professor x self-presented to ED with shortness of breath, fevers and a producti
         onSubmit={handleSubmit}
         className="w-full max-w-lg text-center px-8"
       >
-        <input
-          type="text"
-          placeholder="Patient Name"
-          value={patientName}
-          onChange={(e) => setPatientName(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 mb-4 w-full"
-        />
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Patient Name"
+            value={patientSelection}
+            onChange={(e) => setPatientSelection(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 mb-4 w-full"
+          />
+          <select
+            onChange={(e) => handlePatientSelect(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4"
+          >
+            <option value=""> Choose a patient </option>
+            {names.map((name) => (
+              <option key={name.id} value={name.id}>
+                {name.id}
+              </option>
+            ))}
+          </select>
+        </div>
         <button
           type="submit"
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md"
@@ -100,11 +146,13 @@ Professor x self-presented to ED with shortness of breath, fevers and a producti
       {isGenerating && (
         <p className="text-center text-gray-500">Summarising...</p>
       )}
-      {summary && (
+      {error && <p className="text-red-500">{error}</p>}
+      {summary && patientName && (
         <div
-          className="w-full max-w-3xl
+          className="w-full max-w-4xl
        border border-gray-300 rounded-md px-3 py-2 mb-4"
         >
+          <HealthDataGraphs patientId={patientName} />
           {summary}
         </div>
       )}

@@ -173,10 +173,8 @@ function TemplateEditor() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-semibold">Form Templates</h1>
-      <div className="flex items-center mb-6">
-        {" "}
-        {/* Add a container div for the button */}
+      <span className="flex gap-4 justify-between p-6">
+        <h1 className="text-3xl font-bold">Form Templates</h1>
         {isEditing ? (
           <button
             className="bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto"
@@ -187,12 +185,12 @@ function TemplateEditor() {
         ) : (
           <Link
             to="/"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md"
           >
-            Go Back
+            Back
           </Link>
         )}
-      </div>
+      </span>
 
       {/* Form Cards */}
       {!isEditing && (
